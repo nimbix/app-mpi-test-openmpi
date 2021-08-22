@@ -21,7 +21,7 @@ RUN curl -H 'Cache-Control: no-cache' \
         https://raw.githubusercontent.com/nimbix/mpi-common/$GIT_BRANCH/install-mpi-common.sh \
         | bash
 
-COPY scripts/* /usr/local/bin
+COPY scripts/* /usr/local/bin/
 
 #COPY NAE/screenshot.png /etc/NAE/screenshot.png
 
