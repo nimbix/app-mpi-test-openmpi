@@ -16,7 +16,7 @@
   ],
   "commands": {
     "Validate": {
-      "path": "/usr/local/scripts/validate.sh",
+      "path": "/usr/local/bin/validate.sh",
       "description": "Simple script to validate a working Open MPI library, showing basic information",
       "name": "Open MPI validation",
       "interactive": false,
