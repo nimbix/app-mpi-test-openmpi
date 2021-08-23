@@ -32,6 +32,7 @@
 
 . $(dirname $0)/setenv.sh
 
+echo
 echo "Begin Open MPI validation..."
 
 #Standard CentOS install paths, these are not in PATH
@@ -48,15 +49,15 @@ echo "+++++++++++++++++++++++++++++++++ Identify Open MPI release ++++++++++++++
 # Find the Open MPI installation
 echo "Dumping Open MPI info..."
 if [[ -n $OPENMPI_DIR ]]; then
-  echo "Found Open MPI installation via OPENMPI_DIR at: $OPENMPI_DIR"
+  echo "INFO: Found Open MPI installation via OPENMPI_DIR at: $OPENMPI_DIR"
   OMPIROOT=$OPENMPI_DIR
 else
   echo "Looking for default installs of Open MPI in /usr/lib64/openmpi(3)..."
   if [[ -d $DIST_OMPI3 ]]; then
-    echo "Found Open MPI 3 from distro RPM at $DIST_OMPI3"
+    echo "INFO: Found Open MPI 3 from distro RPM at $DIST_OMPI3"
     OMPIROOT=$DIST_OMPI3
   elif [[ -d $DIST_OMPI1 ]]; then
-    echo "Found Open MPI 1 from distro RPM at $DIST_OMPI1"
+    echo "INFO: Found Open MPI 1 from distro RPM at $DIST_OMPI1"
     OMPIROOT=$DIST_OMPI1
   else
     echo "ERROR: No known Open MPI distribution was found, exiting..."
@@ -64,26 +65,50 @@ else
   fi
 fi
 echo
-echo "Dumping Open MPI info..."
-echo "++++++++++++++++++++++++++++++++++++++++ Info Open MPI ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+echo "++++++++++++++++++++++++++++++++++++++++ Open MPI Info ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 hash $OMPIROOT/bin/ompi_info && $OMPIROOT/bin/ompi_info -V || echo "no ompi_info"
 
 echo "+++++++++++++++++++++++++++++++++++++++++ Open MPI btl ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 hash $OMPIROOT/bin/ompi_info && $OMPIROOT/bin/ompi_info | grep btl || echo "no ompi_info"
 
-echo "+++++++++++++++++++++++++++++++++++++++++++ mpirun with map running hostname ++++++++++++++++++++++++++++++++++++"
+echo "+++++++++++++++++++++++++++++++++++++++++++ mpirun with map running hostname command ++++++++++++++++++++++++++++"
 hash $OMPIROOT/bin/mpirun && $OMPIROOT/bin/mpirun --allow-run-as-root --display-map hostname || echo "no mpirun"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
 echo
-echo "+++++++++++++++++++++++++++++++++Identify libfabric release +++++++++++++++++++++++++++++++++++++++++++++++++++++"
+echo
+echo "+++++++++++++++++++++++++++++++++ Identify libfabric release ++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo
 echo "+++++++++++++++++++++++++++++++++++++++++++ Fabrics +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-# determine the fabric(s) we can use #TODO: detect jarvice libfabric, toggle path
+echo
+echo "Checking for CMA (cross memory attach) to support shared memory transport"
+if [[ "$JARVICE_MPI_CMA" == true ]]; then
+  echo "INFO: CMA support is enabled, shm fabric is available"
+else
+  echo "INFO: No CMA support, shm fabric not available"
+fi
+echo
+
+echo "Checking for JARVICE-detected MPI provider information"
+  if [[ -n $JARVICE_MPI_PROVIDER ]]; then
+    echo "INFO: MPI fabric provider is:  $JARVICE_MPI_PROVIDER"
+  else
+    echo "INFO: No MPI fabric detected, libfabric may still be present for autodetection..."
+  fi
 echo
 
 echo "Dumping fabric info..."
+echo
+echo "Checking libfabric location..."
+LIBFABRICPATH=$(ldconfig -p |grep libfabric)
+if [[ -n $LIBFABRICPATH ]]; then
+  echo "INFO: libfabric present as $LIBFABRICPATH"
+else
+  echo "INFO: no libfabric in library paths"
+fi
+echo
+
 echo "++++++++++++++++++++++++++++++++++++++  fabric list from fi_info +++++++++++++++++++++++++++++++++++++++++++++++"
-hash fi_info && fi_info -l || echo "no fi_info"
+hash fi_info && fi_info -l || echo "INFO: no fi_info"
 echo "+++++++++++++++++++++++++++++++++++++++ fabric info from UCX +++++++++++++++++++++++++++++++++++++++++++++++++++"
-hash ucx_info && ucx_info -d || echo "no ucx_info"
+hash ucx_info && ucx_info -d || echo "INFO: no ucx_info"
