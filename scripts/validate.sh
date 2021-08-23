@@ -35,10 +35,6 @@
 echo
 echo "Begin Open MPI validation..."
 
-#Standard CentOS install paths, these are not in PATH
-DIST_OMPI1=/usr/lib64/openmpi
-DIST_OMPI3=/usr/lib64/openmpi3
-
 # dump the environment we see at startup
 echo
 echo "+++++++++++++++++++++++++++++++ Environment +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
@@ -64,6 +60,8 @@ else
     exit 1
   fi
 fi
+
+# Dump info from the Open MPI commands to show fabric support and version, test out basic mpirun use
 echo
 echo "++++++++++++++++++++++++++++++++++++++++ Open MPI Info ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 hash $OMPIROOT/bin/ompi_info && $OMPIROOT/bin/ompi_info -V || echo "no ompi_info"
@@ -112,3 +110,10 @@ echo "++++++++++++++++++++++++++++++++++++++  fabric list from fi_info +++++++++
 hash fi_info && fi_info -l || echo "INFO: no fi_info"
 echo "+++++++++++++++++++++++++++++++++++++++ fabric info from UCX +++++++++++++++++++++++++++++++++++++++++++++++++++"
 hash ucx_info && ucx_info -d || echo "INFO: no ucx_info"
+
+if [[ -n $RUNHELLO ]]; then
+  echo
+  echo
+  echo "+++++++++++++++++++++++++++++++++++ Run basic MPI Hello World test ++++++++++++++++++++++++++++++++++++++++++++++"
+  # build the mpi-common hello world app, works better if built to local node, using the Open MPI compiler
+fi

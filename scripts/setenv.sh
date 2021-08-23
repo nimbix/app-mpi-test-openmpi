@@ -16,3 +16,13 @@ fi
 if [[ -x /usr/sbin/sshd ]]; then
   sudo /usr/sbin/sshd-keygen && sudo /usr/sbin/sshd
 fi
+
+#Standard CentOS install paths, these are not in PATH
+export DIST_OMPI1=/usr/lib64/openmpi
+export DIST_OMPI3=/usr/lib64/openmpi3
+
+export MPI_COMMON=/opt/mpi-common
+
+if [[ -d $MPI_COMMON/helloworld ]]; then
+  export RUNHELLO=$MPI_COMMON/helloworld
+fi
