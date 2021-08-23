@@ -39,9 +39,11 @@ DIST_OMPI1=/usr/lib64/openmpi
 DIST_OMPI3=/usr/lib64/openmpi3
 
 # dump the environment we see at startup
+echo
 echo "+++++++++++++++++++++++++++++++ Environment +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 env
 
+echo
 echo "+++++++++++++++++++++++++++++++++ Identify Open MPI release +++++++++++++++++++++++++++++++++++++++++++++++++++++"
 # Find the Open MPI installation
 echo "Dumping Open MPI info..."
@@ -56,26 +58,32 @@ else
   elif [[ -d $DIST_OMPI1 ]]; then
     echo "Found Open MPI 1 from distro RPM at $DIST_OMPI1"
     OMPIROOT=$DIST_OMPI1
+  else
+    echo "ERROR: No known Open MPI distribution was found, exiting..."
+    exit 1
   fi
 fi
+echo
+echo "Dumping Open MPI info..."
+echo "++++++++++++++++++++++++++++++++++++++++ Info Open MPI ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+hash $OMPIROOT/bin/ompi_info && $OMPIROOT/bin/ompi_info -V || echo "no ompi_info"
 
+echo "+++++++++++++++++++++++++++++++++++++++++ Open MPI btl ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+hash $OMPIROOT/bin/ompi_info && $OMPIROOT/bin/ompi_info | grep btl || echo "no ompi_info"
+
+echo "+++++++++++++++++++++++++++++++++++++++++++ mpirun with map running hostname ++++++++++++++++++++++++++++++++++++"
+hash $OMPIROOT/bin/mpirun && $OMPIROOT/bin/mpirun --allow-run-as-root --display-map hostname || echo "no mpirun"
+echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+
+echo
 echo "+++++++++++++++++++++++++++++++++Identify libfabric release +++++++++++++++++++++++++++++++++++++++++++++++++++++"
-
+echo
 echo "+++++++++++++++++++++++++++++++++++++++++++ Fabrics +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 # determine the fabric(s) we can use #TODO: detect jarvice libfabric, toggle path
 echo
+
 echo "Dumping fabric info..."
 echo "++++++++++++++++++++++++++++++++++++++  fabric list from fi_info +++++++++++++++++++++++++++++++++++++++++++++++"
 hash fi_info && fi_info -l || echo "no fi_info"
 echo "+++++++++++++++++++++++++++++++++++++++ fabric info from UCX +++++++++++++++++++++++++++++++++++++++++++++++++++"
 hash ucx_info && ucx_info -d || echo "no ucx_info"
-
-echo
-echo "Dumping Open MPI info..."
-echo "++++++++++++++++++++++++++++++++++++++++ Info Open MPI +++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-hash $OMPIROOT/bin/ompi_info && $OMPIROOT/bin/ompi_info -V || echo "no ompi_info"
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-hash $OMPIROOT/bin/ompi_info && $OMPIROOT/bin/ompi_info | grep btl || echo "no ompi_info"
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-hash $OMPIROOT/bin/mpirun && $OMPIROOT/bin/mpirun --allow-run-as-root --display-map hostname || echo "no mpirun"
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
