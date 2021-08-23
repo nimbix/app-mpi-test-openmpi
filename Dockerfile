@@ -11,7 +11,7 @@ ARG GIT_BRANCH
 ENV GIT_BRANCH ${GIT_BRANCH:-master}
 
 # Install image-common
-RUN yum -y install epel-release wget git && \
+RUN yum -y install epel-release wget git gcc make && \
     curl -H 'Cache-Control: no-cache' \
         https://raw.githubusercontent.com/nimbix/image-common/$GIT_BRANCH/install-nimbix.sh \
         | bash

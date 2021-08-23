@@ -111,9 +111,27 @@ hash fi_info && fi_info -l || echo "INFO: no fi_info"
 echo "+++++++++++++++++++++++++++++++++++++++ fabric info from UCX +++++++++++++++++++++++++++++++++++++++++++++++++++"
 hash ucx_info && ucx_info -d || echo "INFO: no ucx_info"
 
-if [[ -n $RUNHELLO ]]; then
+if [[ -n $HELLODIR ]]; then
   echo
   echo
   echo "+++++++++++++++++++++++++++++++++++ Run basic MPI Hello World test ++++++++++++++++++++++++++++++++++++++++++++++"
   # build the mpi-common hello world app, works better if built to local node, using the Open MPI compiler
+  if [[ -f $OMPIROOT/bin/mpicc ]]; then
+    export MPICC=$OMPIROOT/bin/mpicc
+  else
+    echo "WARNING: no MPI compiler wrapper (mpicc) available, skipping Hello World test"
+    exit 0
+  fi
+
+  echo "Building the Hello World MPI Tutorial binary (https://mpitutorial.com/tutorials/mpi-hello-world/)..."
+  mkdir -p /tmp/helloworld && cd /tmp/helloworld
+  cp $HELLODIR/mpitutorial/tutorials/mpi-hello-world/code/* .
+  make
+
+  echo
+  echo
+
+  echo "Running the Hello World across all job cores"
+  $OMPIROOT/bin/mpirun -n $NP --hostfile /etc/JARVICE/nodes ./mpi_hello_world
+
 fi

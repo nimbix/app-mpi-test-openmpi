@@ -17,6 +17,10 @@ if [[ -x /usr/sbin/sshd ]]; then
   sudo /usr/sbin/sshd-keygen && sudo /usr/sbin/sshd
 fi
 
+# Count the cores available for the job
+NP=$(wc -l /etc/JARVICE/cores | awk '{print $1}')
+export NP
+
 #Standard CentOS install paths, these are not in PATH
 export DIST_OMPI1=/usr/lib64/openmpi
 export DIST_OMPI3=/usr/lib64/openmpi3
@@ -24,5 +28,5 @@ export DIST_OMPI3=/usr/lib64/openmpi3
 export MPI_COMMON=/opt/mpi-common
 
 if [[ -d $MPI_COMMON/helloworld ]]; then
-  export RUNHELLO=$MPI_COMMON/helloworld
+  export HELLODIR=$MPI_COMMON/helloworld
 fi
