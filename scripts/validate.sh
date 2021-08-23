@@ -66,7 +66,7 @@ echo
 echo "++++++++++++++++++++++++++++++++++++++++ Open MPI Info ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 hash $OMPIROOT/bin/ompi_info && $OMPIROOT/bin/ompi_info -V || echo "no ompi_info"
 
-echo "+++++++++++++++++++++++++++++++++++++++++ Open MPI btl ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+echo "+++++++++++++++++++++++++++++++++++++++++ Open MPI btl list +++++++++++++++++++++++++++++++++++++++++++++++++++++"
 hash $OMPIROOT/bin/ompi_info && $OMPIROOT/bin/ompi_info | grep btl || echo "no ompi_info"
 
 echo "+++++++++++++++++++++++++++++++++++++++++++ mpirun with map running hostname command ++++++++++++++++++++++++++++"
@@ -75,9 +75,7 @@ echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 echo
 echo
-echo "+++++++++++++++++++++++++++++++++ Identify libfabric release ++++++++++++++++++++++++++++++++++++++++++++++++++++"
-echo
-echo "+++++++++++++++++++++++++++++++++++++++++++ Fabrics +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+echo "+++++++++++++++++++++++++++++++++++++++++++ Identify Fabrics ++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo
 echo "Checking for CMA (cross memory attach) to support shared memory transport"
 if [[ "$JARVICE_MPI_CMA" == true ]]; then
@@ -124,14 +122,20 @@ if [[ -n $HELLODIR ]]; then
   fi
 
   echo "Building the Hello World MPI Tutorial binary (https://mpitutorial.com/tutorials/mpi-hello-world/)..."
-  mkdir -p /tmp/helloworld && cd /tmp/helloworld
+  cd /tmp
   cp $HELLODIR/mpitutorial/tutorials/mpi-hello-world/code/* .
   make
 
+  # Distribute the binary to each node
+  while IFS= read -r node;
+  do
+     scp /tmp/mpi_hello_world $node:/tmp/mpi_hello_world
+  done < /etc/JARVICE/nodes
+
   echo
   echo
 
-  echo "Running the Hello World across all job cores"
-  $OMPIROOT/bin/mpirun -n $NP --hostfile /etc/JARVICE/nodes ./mpi_hello_world
-
+  echo "Running the Hello World across all job cores..."
+  echo
+  $OMPIROOT/bin/mpirun -n $NP --hostfile /etc/JARVICE/nodes /tmp/mpi_hello_world
 fi
