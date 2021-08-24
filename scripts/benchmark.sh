@@ -28,9 +28,14 @@
 # those of the authors and should not be interpreted as representing official
 # policies, either expressed or implied, of Nimbix, Inc.
 #
-set -x
+#set -x
 
 . $(dirname $0)/setenv.sh
 
 echo
-echo "Begin Open MPI benchmarking..."
+echo "=========  Begin Open MPI benchmarking...   ======="
+
+cd $BENCH_DIR || (echo "ERROR: no benchmarking files" && exit 1)
+
+#./configure CC=$OMPIROOT/bin/mpicc CXX=$OMPIROOT/bin/mpicxx
+#make && make install

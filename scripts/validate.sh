@@ -33,7 +33,7 @@
 . $(dirname $0)/setenv.sh
 
 echo
-echo "Begin Open MPI validation..."
+echo "======   Begin Open MPI validation   ======"
 
 # dump the environment we see at startup
 echo
@@ -41,25 +41,6 @@ echo "+++++++++++++++++++++++++++++++ Environment ++++++++++++++++++++++++++++++
 env
 
 echo
-echo "+++++++++++++++++++++++++++++++++ Identify Open MPI release +++++++++++++++++++++++++++++++++++++++++++++++++++++"
-# Find the Open MPI installation
-echo "Dumping Open MPI info..."
-if [[ -n $OPENMPI_DIR ]]; then
-  echo "INFO: Found Open MPI installation via OPENMPI_DIR at: $OPENMPI_DIR"
-  OMPIROOT=$OPENMPI_DIR
-else
-  echo "Looking for default installs of Open MPI in /usr/lib64/openmpi(3)..."
-  if [[ -d $DIST_OMPI3 ]]; then
-    echo "INFO: Found Open MPI 3 from distro RPM at $DIST_OMPI3"
-    OMPIROOT=$DIST_OMPI3
-  elif [[ -d $DIST_OMPI1 ]]; then
-    echo "INFO: Found Open MPI 1 from distro RPM at $DIST_OMPI1"
-    OMPIROOT=$DIST_OMPI1
-  else
-    echo "ERROR: No known Open MPI distribution was found, exiting..."
-    exit 1
-  fi
-fi
 
 # Dump info from the Open MPI commands to show fabric support and version, test out basic mpirun use
 echo
@@ -75,24 +56,6 @@ echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 echo
 echo
-echo "+++++++++++++++++++++++++++++++++++++++++++ Identify Fabrics ++++++++++++++++++++++++++++++++++++++++++++++++++++"
-echo
-echo "Checking for CMA (cross memory attach) to support shared memory transport"
-if [[ "$JARVICE_MPI_CMA" == true ]]; then
-  echo "INFO: CMA support is enabled, shm fabric is available"
-else
-  echo "INFO: No CMA support, shm fabric not available"
-fi
-echo
-
-echo "Checking for JARVICE-detected MPI provider information"
-  if [[ -n $JARVICE_MPI_PROVIDER ]]; then
-    echo "INFO: MPI fabric provider is:  $JARVICE_MPI_PROVIDER"
-  else
-    echo "INFO: No MPI fabric detected, libfabric may still be present for autodetection..."
-  fi
-echo
-
 echo "Dumping fabric info..."
 echo
 echo "Checking libfabric location..."
@@ -109,7 +72,7 @@ hash fi_info && fi_info -l || echo "INFO: no fi_info"
 echo "+++++++++++++++++++++++++++++++++++++++ fabric info from UCX +++++++++++++++++++++++++++++++++++++++++++++++++++"
 hash ucx_info && ucx_info -d || echo "INFO: no ucx_info"
 
-if [[ -n $HELLODIR ]]; then
+if [[ -n $HELLO_DIR ]]; then
   echo
   echo
   echo "+++++++++++++++++++++++++++++++++++ Run basic MPI Hello World test ++++++++++++++++++++++++++++++++++++++++++++++"
@@ -122,14 +85,14 @@ if [[ -n $HELLODIR ]]; then
   fi
 
   echo "Building the Hello World MPI Tutorial binary (https://mpitutorial.com/tutorials/mpi-hello-world/)..."
-  cd /tmp
-  cp $HELLODIR/mpitutorial/tutorials/mpi-hello-world/code/* .
-  make
+  cd $HELLO_DIR && make
 
   # Distribute the binary to each node
   while IFS= read -r node;
   do
-     scp /tmp/mpi_hello_world $node:/tmp/mpi_hello_world
+    if [[ $(hostname) != $node ]] && [[ $node != "JARVICE" ]]; then
+      scp $HELLO_DIR/mpi_hello_world $node:$HELLO_DIR/mpi_hello_world
+    fi
   done < /etc/JARVICE/nodes
 
   echo
@@ -137,5 +100,5 @@ if [[ -n $HELLODIR ]]; then
 
   echo "Running the Hello World across all job cores..."
   echo
-  $OMPIROOT/bin/mpirun -n $NP --hostfile /etc/JARVICE/nodes /tmp/mpi_hello_world
+  $OMPIROOT/bin/mpirun -n $NP --hostfile /etc/JARVICE/nodes $HELLO_DIR/mpi_hello_world
 fi

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 [[ -r /etc/JARVICE/jobenv.sh ]] && source /etc/JARVICE/jobenv.sh
+[[ -r /usr/local/bin/setup_openmpi.sh ]] && source /usr/local/bin/setup_openmpi.sh
 
 # Wait for worker nodes...max of 60 seconds
 WORKER_CHECK_TIMEOUT=60
@@ -21,12 +22,33 @@ fi
 NP=$(wc -l /etc/JARVICE/cores | awk '{print $1}')
 export NP
 
-#Standard CentOS install paths, these are not in PATH
-export DIST_OMPI1=/usr/lib64/openmpi
-export DIST_OMPI3=/usr/lib64/openmpi3
+# Origin for files dropped in via MPI common repo
+export MPI_COMMON=/usr/local/mpi-common
 
-export MPI_COMMON=/opt/mpi-common
+echo "+++++++++++++++++++++++++++++++++++++++++++ Identify Fabrics ++++++++++++++++++++++++++++++++++++++++++++++++++++"
+echo
+echo "Checking for CMA (cross memory attach) to support shared memory transport"
+if [[ "$JARVICE_MPI_CMA" == true ]]; then
+  echo "INFO: CMA support is enabled, shm fabric is available"
+else
+  echo "INFO: No CMA support, shm fabric not available"
+fi
+echo
 
-if [[ -d $MPI_COMMON/helloworld ]]; then
-  export HELLODIR=$MPI_COMMON/helloworld
+echo "Checking for JARVICE-detected MPI provider information"
+  if [[ -n $JARVICE_MPI_PROVIDER ]]; then
+    echo "INFO: MPI fabric provider is:  $JARVICE_MPI_PROVIDER"
+  else
+    echo "INFO: No MPI fabric detected, libfabric may still be present for autodetection..."
+  fi
+echo
+
+# Location of the MPI Hello World tutorial files
+if [[ -d $MPI_COMMON/mpitutorial/tutorials/mpi-hello-world/code ]]; then
+  export HELLO_DIR=$MPI_COMMON/mpitutorial/tutorials/mpi-hello-world/code
+fi
+
+# Location of the OSU Micro-benchmark files
+if [[ -d /usr/local/libexec/osu-micro-benchmarks/mpi ]]; then
+  export BENCH_DIR=/usr/local/libexec/osu-micro-benchmarks/mpi
 fi
