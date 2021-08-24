@@ -39,7 +39,6 @@ echo "======   Begin Open MPI validation   ======"
 echo
 echo "+++++++++++++++++++++++++++++++ Environment +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 env
-
 echo
 
 # Dump info from the Open MPI commands to show fabric support and version, test out basic mpirun use

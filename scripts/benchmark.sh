@@ -37,5 +37,4 @@ echo "=========  Begin Open MPI benchmarking...   ======="
 
 cd $BENCH_DIR || (echo "ERROR: no benchmarking files" && exit 1)
 
-#./configure CC=$OMPIROOT/bin/mpicc CXX=$OMPIROOT/bin/mpicxx
-#make && make install
+

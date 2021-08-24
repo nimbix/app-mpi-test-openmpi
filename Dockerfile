@@ -17,7 +17,7 @@ RUN yum -y install file git gcc gcc-c++ make openmpi3 openmpi && \
 
 COPY scripts/setup_openmpi.sh /usr/local/bin/
 COPY buildscripts/build-osu-benchmarks.sh .
-RUN bash -x /tmp/build-osu-benchmarks.sh
+RUN bash /tmp/build-osu-benchmarks.sh
 
 
 ################# Multistage Build, stage 2 ###################################
