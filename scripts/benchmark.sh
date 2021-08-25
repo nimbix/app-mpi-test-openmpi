@@ -34,12 +34,15 @@
 
 echo
 echo "=========  Begin Open MPI benchmarking...   ======="
-
+echo
 cd $BENCH_DIR || (echo "ERROR: no benchmarking files" && exit 1)
 
+echo "++++++++++++++++++++++++++++++++ Building benchmarking files locally ++++++++++++++++++++++++++++++++++++++++++++"
+echo
 # Build the benchmark files with the local environ
 /usr/local/buildscripts/build-osu-benchmarks.sh
 
-#  echo "Running the Hello World across all job cores..."
-#  echo
-#  $OMPIROOT/bin/mpirun -n $NP --hostfile /etc/JARVICE/nodes $BENCH_DIR/mpi_hello
+echo
+echo "++++++++++++++++++++++++++ Running the benchmarks across all job cores ++++++++++++++++++++++++++++++++++++++++++"
+echo
+#$OMPIROOT/bin/mpirun -n $NP --hostfile /etc/JARVICE/nodes $BENCH_DIR/mpi_hello

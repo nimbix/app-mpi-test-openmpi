@@ -23,10 +23,10 @@
       "parameters": {
       }
     },
-    "Benchmark": {
+    "Benchmarks": {
       "path": "/usr/local/bin/benchmark.sh",
       "description": "Run benchmarks to demonstrate working Open MPI libraries, fabric comparison and performance",
-      "name": "Open MPI benchmarking",
+      "name": "Open MPI benchmarks",
       "interactive": false,
       "parameters": {
       }
