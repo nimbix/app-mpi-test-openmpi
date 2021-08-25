@@ -4,7 +4,7 @@ WORKDIR /tmp
 
 # Update SERIAL_NUMBER to force rebuild of all layers (don't use cached layers)
 ARG SERIAL_NUMBER
-ENV SERIAL_NUMBER ${SERIAL_NUMBER:-20210824.1500}
+ENV SERIAL_NUMBER ${SERIAL_NUMBER:-20210825.1500}
 
 ARG GIT_BRANCH
 ENV GIT_BRANCH ${GIT_BRANCH:-master}
@@ -17,7 +17,7 @@ RUN yum -y install file git gcc gcc-c++ make openmpi3 openmpi && \
 
 COPY scripts/setup_openmpi.sh /usr/local/bin/
 COPY buildscripts/build-osu-benchmarks.sh .
-RUN bash /tmp/build-osu-benchmarks.sh
+RUN /tmp/build-osu-benchmarks.sh
 
 
 ################# Multistage Build, stage 2 ###################################
