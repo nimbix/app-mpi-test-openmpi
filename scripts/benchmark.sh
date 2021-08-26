@@ -28,7 +28,7 @@
 # those of the authors and should not be interpreted as representing official
 # policies, either expressed or implied, of Nimbix, Inc.
 #
-set -x
+#set -x
 
 . $(dirname $0)/setenv.sh
 
@@ -65,13 +65,13 @@ done
 # Push the benchmark binary out to each node
 if [[ $NN -gt 1 ]]; then
   echo
-  echo "++++++++++++++++++++++++++ Distributing selected benchmark: $BENCHMARK to each node +++++++++++++++++++++++++++"
-  env
+  echo "++++++++++++++++++++++++++++++++++++ Distributing benchmarks to each node +++++++++++++++++++++++++++++++++++++"
+  echo
 
   while IFS= read -r node;
   do
     if [[ $(hostname) != "$node" ]] ; then
-      echo $BENCH_DIR
+      echo "node: $node"
       ssh -n $node sudo mkdir -p $BENCH_DIR
       ssh -n $node sudo chmod a+w $BENCH_DIR
       scp -r $BENCH_DIR $node:$BENCH_DIR/..
@@ -85,9 +85,6 @@ echo
 echo "+++++++++++++ Running selected benchmark: $BENCHMARK on $JARVICE_MPI_PROVIDER +++++++++++++++++++++++++++++++++++"
 $OMPIROOT/bin/mpirun -n $NP $HOSTFILE $BENCH_DIR/$BENCHMARK
 
-#
-#[jhegge@jarvice-job-11694-vt6xw mpi]$ tree
-#.
 # collective
 #  osu_allgather
 #  osu_allgatherv
