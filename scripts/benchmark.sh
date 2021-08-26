@@ -62,6 +62,20 @@ while [[ -n "$1" ]]; do
   shift
 done
 
+# Setup arguments specific to each benchmark
+case $BENCHMARK in
+
+  "startup/osu_hello")
+    PROCS="-n $NP"
+    ;;
+  "pt2pt/osu_latency" | "one-sided/osu_get_latency" | "one-sided/osu_get_bw")
+    PROCS="-n 2"
+    ;;
+  *)
+    PROCS="-n $NP"
+    ;;
+esac
+
 # Push the benchmark binary out to each node
 if [[ $NN -gt 1 ]]; then
   echo
@@ -83,7 +97,7 @@ fi
 # Run the benchmark with the hostfile for all nodes
 echo
 echo "+++++++++++++ Running selected benchmark: $BENCHMARK on $JARVICE_MPI_PROVIDER +++++++++++++++++++++++++++++++++++"
-$OMPIROOT/bin/mpirun -n $NP $HOSTFILE $BENCH_DIR/$BENCHMARK
+$OMPIROOT/bin/mpirun $PROCS $HOSTFILE $BENCH_DIR/$BENCHMARK
 
 # collective
 #  osu_allgather
