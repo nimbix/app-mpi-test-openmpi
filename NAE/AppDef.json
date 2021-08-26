@@ -29,6 +29,23 @@
       "name": "Open MPI benchmarks",
       "interactive": false,
       "parameters": {
+        "-bench": {
+          "name": "Benchmark selection",
+          "required": true,
+          "type": "selection",
+          "values": [
+            "startup/osu_hello",
+            "pt2pt/osu_latency",
+            "one-sided/osu_get_latency",
+            "one-sided/osu_get_bw"
+          ],
+          "mvalues": [
+            "Startup: osu_hello",
+            "Point to Point: osu_latency",
+            "One-sided: osu_get_latency",
+            "One-sided: osu_get_bw"
+          ]
+        }
       }
     },
     "Server": {

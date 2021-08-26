@@ -45,4 +45,78 @@ echo
 echo
 echo "++++++++++++++++++++++++++ Running the benchmarks across all job cores ++++++++++++++++++++++++++++++++++++++++++"
 echo
-#$OMPIROOT/bin/mpirun -n $NP --hostfile /etc/JARVICE/nodes $BENCH_DIR/mpi_hello
+
+############  parse command line  #####################################################################################
+while [[ -n "$1" ]]; do
+  case "$1" in
+  -bench)
+    shift
+    BENCHMARK=$1
+    ;;
+  *)
+    echo "Invalid argument: $1" >&2
+    exit 1
+    ;;
+  esac
+  shift
+done
+
+
+#/usr/local/libexec/osu-micro-benchmarks/mpi/startup/osu_hello
+echo
+echo "Running selected benchmark: $BENCHMARK on $JARVICE_MPI_PROVIDER"
+$OMPIROOT/bin/mpirun -n $NP --hostfile /etc/JARVICE/nodes $BENCH_DIR/$BENCHMARK
+
+#
+#[jhegge@jarvice-job-11694-vt6xw mpi]$ tree
+#.
+# collective
+#  osu_allgather
+#  osu_allgatherv
+#  osu_allreduce
+#  osu_alltoall
+#  osu_alltoallv
+#  osu_barrier
+#  osu_bcast
+#  osu_gather
+#  osu_gatherv
+#  osu_iallgather
+#  osu_iallgatherv
+#  osu_iallreduce
+#  osu_ialltoall
+#  osu_ialltoallv
+#  osu_ialltoallw
+#  osu_ibarrier
+#  osu_ibcast
+#  osu_igather
+#  osu_igatherv
+#  osu_ireduce
+#  osu_iscatter
+#  osu_iscatterv
+#  osu_reduce
+#  osu_reduce_scatter
+#  osu_scatter
+#  osu_scatterv
+# one-sided
+#  osu_acc_latency
+#  osu_cas_latency
+#  osu_fop_latency
+#  osu_get_acc_latency
+#  osu_get_bw
+#  osu_get_latency
+#  osu_put_bibw
+#  osu_put_bw
+#  osu_put_latency
+# pt2pt
+#  osu_bibw
+#  osu_bw
+#  osu_latency
+#  osu_latency_mp
+#  osu_latency_mt
+#  osu_mbw_mr
+#  osu_multi_lat
+# startup
+#     osu_hello
+#     osu_init
+#
+#4 directories, 44 files
