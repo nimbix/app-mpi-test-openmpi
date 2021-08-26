@@ -21,6 +21,8 @@ fi
 # Count the cores available for the job
 NP=$(wc -l /etc/JARVICE/cores | awk '{print $1}')
 export NP
+NN=$(wc -l /etc/JARVICE/nodes | awk '{print $1}')
+export NN
 
 # Origin for files dropped in via MPI common repo
 export MPI_COMMON=/usr/local/mpi-common

@@ -46,7 +46,8 @@ echo
 echo "++++++++++++++++++++++++++ Running the benchmarks across all job cores ++++++++++++++++++++++++++++++++++++++++++"
 echo
 
-############  parse command line  #####################################################################################
+############  parse command line  ###############
+HOSTFILE=""
 while [[ -n "$1" ]]; do
   case "$1" in
   -bench)
@@ -61,11 +62,24 @@ while [[ -n "$1" ]]; do
   shift
 done
 
+# Push the benchmark binary out to each node
+if [[ $NN -gt 1 ]]; then
+  echo
+  echo "++++++++++++++++++++++++++ Distributing selected benchmark: $BENCHMARK to each node +++++++++++++++++++++++++++"
 
-#/usr/local/libexec/osu-micro-benchmarks/mpi/startup/osu_hello
+  while IFS= read -r node;
+  do
+    if [[ $(hostname) != "$node" ]] ; then
+      scp $BENCH_DIR/$BENCHMARK $node:$BENCH_DIR/$BENCHMARK
+    fi
+  done < /etc/JARVICE/nodes
+  HOSTFILE="--hostfile /etc/JARVICE/nodes"
+fi
+
+# Run the benchmark with the hostfile for all nodes
 echo
-echo "Running selected benchmark: $BENCHMARK on $JARVICE_MPI_PROVIDER"
-$OMPIROOT/bin/mpirun -n $NP --hostfile /etc/JARVICE/nodes $BENCH_DIR/$BENCHMARK
+echo "+++++++++++++ Running selected benchmark: $BENCHMARK on $JARVICE_MPI_PROVIDER +++++++++++++++++++++++++++++++++++"
+$OMPIROOT/bin/mpirun -n $NP $HOSTFILE $BENCH_DIR/$BENCHMARK
 
 #
 #[jhegge@jarvice-job-11694-vt6xw mpi]$ tree
