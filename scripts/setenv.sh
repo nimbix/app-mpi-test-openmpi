@@ -51,6 +51,4 @@ if [[ -d $MPI_COMMON/mpitutorial/tutorials/mpi-hello-world/code ]]; then
 fi
 
 # Location of the OSU Micro-benchmark files
-if [[ -d /usr/local/libexec/osu-micro-benchmarks/mpi ]]; then
-  export BENCH_DIR=/usr/local/libexec/osu-micro-benchmarks/mpi
-fi
+export BENCH_DIR=/usr/local/libexec/osu-micro-benchmarks/mpi

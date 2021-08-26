@@ -72,9 +72,9 @@ if [[ $NN -gt 1 ]]; then
   do
     if [[ $(hostname) != "$node" ]] ; then
       echo $BENCH_DIR
-      ssh -n $node sudo mkdir -p /usr/local/libexec/osu-micro-benchmarks/mpi
-      ssh -n $node sudo chmod a+w /usr/local/libexec/osu-micro-benchmarks/mpi
-      scp -r /usr/local/libexec/osu-micro-benchmarks/mpi $node:/usr/local/libexec/osu-micro-benchmarks
+      ssh -n $node sudo mkdir -p $BENCH_DIR
+      ssh -n $node sudo chmod a+w $BENCH_DIR
+      scp -r $BENCH_DIR $node:$BENCH_DIR/..
     fi
   done < /etc/JARVICE/nodes
   HOSTFILE="--hostfile /etc/JARVICE/nodes"
