@@ -70,7 +70,9 @@ if [[ $NN -gt 1 ]]; then
   while IFS= read -r node;
   do
     if [[ $(hostname) != "$node" ]] ; then
-      scp $BENCH_DIR/$BENCHMARK $node:$BENCH_DIR/$BENCHMARK
+      ssh -n $node sudo mkdir -p $BENCH_DIR
+      ssh -n $node sudo chmod a+w $BENCH_DIR
+      scp -r $BENCH_DIR $node:$BENCH_DIR/..
     fi
   done < /etc/JARVICE/nodes
   HOSTFILE="--hostfile /etc/JARVICE/nodes"
