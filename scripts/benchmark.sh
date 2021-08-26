@@ -28,7 +28,7 @@
 # those of the authors and should not be interpreted as representing official
 # policies, either expressed or implied, of Nimbix, Inc.
 #
-#set -x
+set -x
 
 . $(dirname $0)/setenv.sh
 
@@ -66,10 +66,12 @@ done
 if [[ $NN -gt 1 ]]; then
   echo
   echo "++++++++++++++++++++++++++ Distributing selected benchmark: $BENCHMARK to each node +++++++++++++++++++++++++++"
+  env
 
   while IFS= read -r node;
   do
     if [[ $(hostname) != "$node" ]] ; then
+      echo $BENCH_DIR
       ssh -n $node sudo mkdir -p $BENCH_DIR
       ssh -n $node sudo chmod a+w $BENCH_DIR
       scp -r $BENCH_DIR $node:$BENCH_DIR/..
