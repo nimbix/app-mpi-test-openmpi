@@ -53,7 +53,7 @@ while [[ -n "$1" ]]; do
 done
 
 # Build the benchmarks if not already prese
-if [[ -f $BENCH_DIR/$BENCHMARK ]]; then
+if [[ ! -f $BENCH_DIR/$BENCHMARK ]]; then
   echo "++++++++++++++++++++++++++++++++ Building benchmarking files locally ++++++++++++++++++++++++++++++++++++++++++++"
   echo
   # Build the benchmark files with the local environ
@@ -96,6 +96,7 @@ fi
 # Run the benchmark with the hostfile for all nodes
 echo
 echo "+++++++++++++ Running selected benchmark: $BENCHMARK on $JARVICE_MPI_PROVIDER +++++++++++++++++++++++++++++++++++"
+#--timeout <seconds>
 $OMPIROOT/bin/mpirun -v $PROCS $HOSTFILE $BENCH_DIR/$BENCHMARK
 
 # collective
