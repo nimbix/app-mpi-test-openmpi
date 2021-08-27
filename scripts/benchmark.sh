@@ -35,7 +35,7 @@
 echo
 echo "=========  Begin Open MPI benchmarking...   ======="
 echo
-cd $BENCH_DIR || (echo "ERROR: no benchmarking files" && exit 1)
+echo
 
 echo "++++++++++++++++++++++++++++++++ Building benchmarking files locally ++++++++++++++++++++++++++++++++++++++++++++"
 echo
