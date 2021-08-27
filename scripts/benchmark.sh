@@ -52,6 +52,11 @@ while [[ -n "$1" ]]; do
   shift
 done
 
+if [[ -z "$BENCHMARK" ]]; then
+  echo "ERROR: no benchmark specific, exiting..." >&2
+  exit 1
+fi
+
 # Build the benchmarks if not already prese
 if [[ ! -f $BENCH_DIR/$BENCHMARK ]]; then
   echo "++++++++++++++++++++++++++++++++ Building benchmarking files locally ++++++++++++++++++++++++++++++++++++++++++++"
@@ -96,8 +101,9 @@ fi
 # Run the benchmark with the hostfile for all nodes
 echo
 echo "+++++++++++++ Running selected benchmark: $BENCHMARK on $JARVICE_MPI_PROVIDER +++++++++++++++++++++++++++++++++++"
-#--timeout <seconds> mca_base_verbose opal_common_ofi_verbose
-$OMPIROOT/bin/mpirun -v --mca mca_base_verbose stdout,level:9 $PROCS $HOSTFILE $BENCH_DIR/$BENCHMARK
+#--timeout <seconds> -v --mca mca_base_verbose stdout,level:9
+# Add some verbosity to the btl output
+$OMPIROOT/bin/mpirun --mca btl_base_verbose 10 $PROCS $HOSTFILE $BENCH_DIR/$BENCHMARK
 
 # collective
 #  osu_allgather
