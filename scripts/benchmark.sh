@@ -35,16 +35,6 @@
 echo
 echo "=========  Begin Open MPI benchmarking...   ======="
 echo
-echo
-
-echo "++++++++++++++++++++++++++++++++ Building benchmarking files locally ++++++++++++++++++++++++++++++++++++++++++++"
-echo
-# Build the benchmark files with the local environ
-/usr/local/buildscripts/build-osu-benchmarks.sh
-
-echo
-echo "++++++++++++++++++++++++++ Running the benchmarks across all job cores ++++++++++++++++++++++++++++++++++++++++++"
-echo
 
 ############  parse command line  ###############
 HOSTFILE=""
@@ -61,6 +51,15 @@ while [[ -n "$1" ]]; do
   esac
   shift
 done
+
+# Build the benchmarks if not already prese
+if [[ -f $BENCH_DIR/$BENCHMARK ]]; then
+  echo "++++++++++++++++++++++++++++++++ Building benchmarking files locally ++++++++++++++++++++++++++++++++++++++++++++"
+  echo
+  # Build the benchmark files with the local environ
+  /usr/local/buildscripts/build-osu-benchmarks.sh
+  echo
+fi
 
 # Setup arguments specific to each benchmark
 case $BENCHMARK in
@@ -97,7 +96,7 @@ fi
 # Run the benchmark with the hostfile for all nodes
 echo
 echo "+++++++++++++ Running selected benchmark: $BENCHMARK on $JARVICE_MPI_PROVIDER +++++++++++++++++++++++++++++++++++"
-$OMPIROOT/bin/mpirun $PROCS $HOSTFILE $BENCH_DIR/$BENCHMARK
+$OMPIROOT/bin/mpirun -v $PROCS $HOSTFILE $BENCH_DIR/$BENCHMARK
 
 # collective
 #  osu_allgather
