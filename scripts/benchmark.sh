@@ -96,8 +96,8 @@ fi
 # Run the benchmark with the hostfile for all nodes
 echo
 echo "+++++++++++++ Running selected benchmark: $BENCHMARK on $JARVICE_MPI_PROVIDER +++++++++++++++++++++++++++++++++++"
-#--timeout <seconds>
-$OMPIROOT/bin/mpirun -v $PROCS $HOSTFILE $BENCH_DIR/$BENCHMARK
+#--timeout <seconds> mca_base_verbose opal_common_ofi_verbose
+$OMPIROOT/bin/mpirun -v --mca mca_base_verbose stdout,level:9 $PROCS $HOSTFILE $BENCH_DIR/$BENCHMARK
 
 # collective
 #  osu_allgather
