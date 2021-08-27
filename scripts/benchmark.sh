@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash -l
 #
 # Copyright (c) 2021, Nimbix, Inc.
 # All rights reserved.
