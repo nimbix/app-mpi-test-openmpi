@@ -37,13 +37,21 @@
             "Startup: osu_hello",
             "Point to Point: osu_latency",
             "One-sided: osu_get_latency",
-            "One-sided: osu_get_bw"
+            "One-sided: osu_get_bw",
+            "Collective: osu_allgather",
+            "Collective: osu_allreduce",
+            "Collective non-blocking: osu_iallgather",
+            "Collective non-blocking: osu_iallreduce"
           ],
           "mvalues": [
             "startup/osu_hello",
             "pt2pt/osu_latency",
             "one-sided/osu_get_latency",
-            "one-sided/osu_get_bw"
+            "one-sided/osu_get_bw",
+            "collective/osu_allgather",
+            "collective/osu_allreduce",
+            "collective/osu_iallgather",
+            "collective/osu_iallreduce"
           ]
         }
       }

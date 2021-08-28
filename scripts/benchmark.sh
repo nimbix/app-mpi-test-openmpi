@@ -75,6 +75,10 @@ case $BENCHMARK in
   "pt2pt/osu_latency" | "one-sided/osu_get_latency" | "one-sided/osu_get_bw")
     PROCS="-n 2"
     ;;
+  "collective/osu_allgather" | "collective/osu_allreduce" | "collective/osu_iallgather" | "collective/osu_iallreduce")
+    PROCS="-n $NP"
+    BFLAG=" -f"
+    ;;
   *)
     PROCS="-n $NP"
     ;;
@@ -89,7 +93,7 @@ if [[ $NN -gt 1 ]]; then
   while IFS= read -r node;
   do
     if [[ $(hostname) != "$node" ]] ; then
-      echo "node: $node"
+      echo "worker node: $node"
       ssh -n $node sudo mkdir -p $BENCH_DIR
       ssh -n $node sudo chmod a+w $BENCH_DIR
       scp -r $BENCH_DIR $node:$BENCH_DIR/..
@@ -100,11 +104,13 @@ fi
 
 # Run the benchmark with the hostfile for all nodes
 echo
-echo "+++++++++++++ Running selected benchmark: $BENCHMARK on $JARVICE_MPI_PROVIDER +++++++++++++++++++++++++++++++++++"
-#--timeout <seconds> -v --mca mca_base_verbose stdout,level:9
+echo "+++++++++++++ Running selected benchmark: $BENCHMARK on fabric: $JARVICE_MPI_PROVIDER +++++++++++++++++++++++++++"
+echo
+# possible flags: --timeout <seconds>  --mca mca_base_verbose stdout,level:9
 # Add some verbosity to the btl output
-$OMPIROOT/bin/mpirun --mca btl_base_verbose 10 $PROCS $HOSTFILE $BENCH_DIR/$BENCHMARK
+$OMPIROOT/bin/mpirun --mca btl_base_verbose 10 $PROCS $HOSTFILE $BENCH_DIR/$BENCHMARK $BFLAG
 
+### OSU Benchmark full list
 # collective
 #  osu_allgather
 #  osu_allgatherv
