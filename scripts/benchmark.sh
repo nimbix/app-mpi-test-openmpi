@@ -44,6 +44,10 @@ while [[ -n "$1" ]]; do
     shift
     BENCHMARK=$1
     ;;
+  -verbose)
+    shift
+    VERBOSE="--mca btl_base_verbose 10"
+    ;;
   *)
     echo "Invalid argument: $1" >&2
     exit 1
@@ -108,7 +112,7 @@ echo "+++++++++++++ Running selected benchmark: $BENCHMARK on fabric: $JARVICE_M
 echo
 # possible flags: --timeout <seconds>  --mca mca_base_verbose stdout,level:9
 # Add some verbosity to the btl output
-$OMPIROOT/bin/mpirun --mca btl_base_verbose 10 $PROCS $HOSTFILE $BENCH_DIR/$BENCHMARK $BFLAG
+$OMPIROOT/bin/mpirun $VERBOSE $PROCS $HOSTFILE $BENCH_DIR/$BENCHMARK $BFLAG
 
 ### OSU Benchmark full list
 # collective

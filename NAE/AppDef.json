@@ -25,7 +25,7 @@
     },
     "Benchmarks": {
       "path": "/usr/local/bin/benchmark.sh",
-      "description": "Run benchmarks to demonstrate working Open MPI libraries, fabric comparison and performance",
+      "description": "Run the OMB (OSU Micro-Benchmarks) benchmarks to demonstrate working Open MPI libraries, fabric comparison and performance",
       "name": "Open MPI benchmarks",
       "interactive": false,
       "parameters": {
@@ -53,6 +53,13 @@
             "collective/osu_iallgather",
             "collective/osu_iallreduce"
           ]
+        },
+        "-verbose": {
+          "name": "Verbose output",
+          "required": true,
+          "positional": false,
+          "type": "BOOL",
+          "value": false
         }
       }
     },
