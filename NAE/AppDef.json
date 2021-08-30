@@ -62,14 +62,6 @@
           "value": false
         }
       }
-    },
-    "Server": {
-      "path": "/sbin/init",
-      "interactive": true,
-      "publicip": true,
-      "name": "Server",
-      "description": "Launch a session with all boot services, including SSH (if installed)",
-      "parameters": {}
     }
   },
   "image": {
