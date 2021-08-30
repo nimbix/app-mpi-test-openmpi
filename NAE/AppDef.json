@@ -17,7 +17,7 @@
   "commands": {
     "Validate": {
       "path": "/usr/local/bin/validate.sh",
-      "description": "Simple script to validate a working Open MPI library, showing basic information",
+      "description": "Validate a working Open MPI library, showing basic information from ompi_info, fi_info, etc.",
       "name": "Open MPI validation",
       "interactive": false,
       "parameters": {
@@ -25,7 +25,7 @@
     },
     "Benchmarks": {
       "path": "/usr/local/bin/benchmark.sh",
-      "description": "Run the OMB (OSU Micro-Benchmarks) benchmarks to demonstrate working Open MPI libraries, fabric comparison and performance",
+      "description": "Run a selected OMB (OSU Micro-Benchmarks) benchmark to demonstrate working Open MPI libraries, fabric comparison and performance",
       "name": "Open MPI benchmarks",
       "interactive": false,
       "parameters": {
