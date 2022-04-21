@@ -77,7 +77,7 @@ case $BENCHMARK in
     PROCS="-n $NP"
     ;;
   "pt2pt/osu_latency" | "one-sided/osu_get_latency" | "one-sided/osu_get_bw")
-    PROCS="-n 2"
+    PROCS="-n 2 -npernode 1"
     ;;
   "collective/osu_allgather" | "collective/osu_allreduce" | "collective/osu_iallgather" | "collective/osu_iallreduce")
     PROCS="-n $NP"
