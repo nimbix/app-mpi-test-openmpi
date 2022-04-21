@@ -1,6 +1,6 @@
 #!/bin/bash -l
 #
-# Copyright (c) 2021, Nimbix, Inc.
+# Copyright (c) 2022, Nimbix, Inc.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -112,7 +112,7 @@ echo "+++++++++++++ Running selected benchmark: $BENCHMARK on fabric: $JARVICE_M
 echo
 # possible flags: --timeout <seconds>  --mca mca_base_verbose stdout,level:9
 # Add some verbosity to the btl output
-$OMPIROOT/bin/mpirun $VERBOSE $PROCS $HOSTFILE $BENCH_DIR/$BENCHMARK $BFLAG
+$OMPIROOT/bin/mpirun -mca btl_openib_allow_ib 1 $VERBOSE $PROCS $HOSTFILE $BENCH_DIR/$BENCHMARK $BFLAG
 
 ### OSU Benchmark full list
 # collective

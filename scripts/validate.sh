@@ -1,6 +1,6 @@
 #!/bin/bash -l
 #
-# Copyright (c) 2021, Nimbix, Inc.
+# Copyright (c) 2022, Nimbix, Inc.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -50,7 +50,7 @@ echo "+++++++++++++++++++++++++++++++++++++++++ Open MPI btl list ++++++++++++++
 hash $OMPIROOT/bin/ompi_info && $OMPIROOT/bin/ompi_info | grep btl || echo "no ompi_info"
 
 echo "+++++++++++++++++++++++++++++++++++++++++++ mpirun with map running hostname command ++++++++++++++++++++++++++++"
-hash $OMPIROOT/bin/mpirun && $OMPIROOT/bin/mpirun --allow-run-as-root --display-map hostname || echo "no mpirun"
+hash $OMPIROOT/bin/mpirun && $OMPIROOT/bin/mpirun -mca btl_openib_allow_ib 1 --allow-run-as-root --display-map hostname || echo "no mpirun"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
 echo
@@ -99,5 +99,5 @@ if [[ -n $HELLO_DIR ]]; then
 
   echo "Running the Hello World across all job cores..."
   echo
-  $OMPIROOT/bin/mpirun -n $NP --hostfile /etc/JARVICE/nodes $HELLO_DIR/mpi_hello_world
+  $OMPIROOT/bin/mpirun -mca btl_openib_allow_ib 1 -n $NP --hostfile /etc/JARVICE/nodes $HELLO_DIR/mpi_hello_world
 fi
