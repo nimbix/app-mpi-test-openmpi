@@ -1,7 +1,7 @@
 {
   "name": "MPI Test - Open MPI",
   "classifications": [
-    "Software Development/Software Testing"
+      "HPC/Benchmark"
   ],
   "description": "Benchmark and validation tests to demonstrate working Open MPI libraries over available fabrics and providers",
   "author": "Nimbix, Inc.",
